@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>题目序号：【3】</title>
+    <link href="../css/common.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="out-container">
+      <div class="title">
+        <h1>题目序号：【3】</h1>
+      </div>
+      <hr />
+      <div class="content">
+        <!-- 请在此处完成你的实现 -->
+        <h1>帖子列表</h1>
+        <ul id="postList"></ul>
+      </div>
+    </div>
+  </body>
+  <script>
+    // http请求
+    function globalRequest(url) {
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+        request.open("GET", url);
+        request.onreadystatechange = () => {
+          if (request.readyState == 4) {
+            if (request.status >= 200 && request.status < 300)
+              resolve(request.responseText);
+            else reject(new Error(`Request failed with ${request.status}`));
+          }
+        };
+        request.send();
+        setTimeout(() => {
+          request.abort();
+          reject(new Error("Request timed out"));
+        }, 3000);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const postList = document.getElementById("postList");
+      // 获取帖子列表
+      globalRequest("https://jsonplaceholder.typicode.com/posts")
+        .then((posts) => {
+          let list = JSON.parse(posts);
+          list.forEach((item) => {
+            const postItem = document.createElement("li");
+            postItem.innerHTML = `
+          <div class="post-title">标题：${item.title}</div>
+          <button onclick="loadPostDetails(${item.id})">查看详情</button>
+        `;
+            postList.appendChild(postItem);
+          });
+        })
+        .catch((error) => {
+          console.error("Failed to fetch posts:", error);
+        });
+    });
+
+    // 查看帖子详情
+    function loadPostDetails(postId) {
+      globalRequest(
+        `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
+      )
+        .then((comments) => {
+          comments = JSON.parse(comments);
+          const postDetails = document.createElement("div");
+          postDetails.className = "post-details";
+          postDetails.innerHTML = `
+            <h2>帖子详情</h2>
+            <p>ID: ${postId}</p>
+            <h3>评论:</h3>
+            <ul>
+            ${comments
+              .map((comment) => `<li>${comment.name}: ${comment.body}</li>`)
+              .join("")}
+            </ul>
+        `;
+          postList.appendChild(postDetails);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch comments:", error);
+        });
+    }
+  </script>
+</html>

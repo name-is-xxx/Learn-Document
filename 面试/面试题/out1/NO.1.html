@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>题目序号：【1】</title>
+    <link href="../css/common.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="out-container">
+      <div class="title">
+        <h1>题目序号：【1】</h1>
+      </div>
+      <hr />
+      <div class="content">
+        <!-- 请在此处完成你的实现 -->
+        <canvas width="800" height="600"></canvas>
+      </div>
+    </div>
+  </body>
+  <script>
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    let isDrawing = false;
+    let point = [];
+    let aX,
+      aY,
+      bX,
+      bY,
+      cX,
+      cY,
+      dX,
+      dY,
+      eX,
+      eY,
+      fX,
+      fY,
+      gX,
+      gY = 0;
+    let = 0;
+    let = 0;
+    let = 0;
+
+    canvas.addEventListener("mousedown", (e) => {
+      isDrawing = true;
+      [aX, aY] = [e.offsetX, e.offsetY];
+    });
+
+    canvas.addEventListener("mousemove", (e) => {
+      if (isDrawing) {
+        [bX, bY] = [e.offsetX, e.offsetY];
+        getPoint();
+      }
+    });
+
+    canvas.addEventListener("mouseup", (e) => {
+      if (isDrawing) {
+        [bX, bY] = [e.offsetX, e.offsetY];
+        getPoint();
+        isDrawing = false;
+      }
+    });
+
+    function getPoint() {
+      [gX, gY] = [bX - (1 / 4) * (bX - aX), bY - (1 / 4) * (bY - aY)];
+      [cX, cY] = [gX - (bX - gX), bY];
+      [fX, fY] = [bX, gY - (bY - gY)];
+      [dX, dY] = [gX - (1 / 3) * (gX - cX), cY - (2 / 3) * (cY - gY)];
+      [eX, eY] = [fX - (2 / 3) * (fX - gX), gY - (1 / 3) * (gY - fY)];
+      drawArrow();
+    }
+
+    function drawArrow() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.moveTo(aX, aY);
+      ctx.lineTo(dX, dY);
+      ctx.lineTo(cX, cY);
+      ctx.lineTo(bX, bY);
+      ctx.lineTo(fX, fY);
+      ctx.lineTo(eX, eY);
+      ctx.lineTo(aX, aY);
+      ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+      ctx.fill();
+      ctx.strokeStyle = "red";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.closePath();
+    }
+  </script>
+</html>

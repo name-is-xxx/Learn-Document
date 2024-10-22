@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>题目序号：【5】</title>
+    <link href="../css/common.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="out-container">
+      <div class="title">
+        <h1>题目序号：【5】</h1>
+      </div>
+      <hr />
+      <div class="content">
+        <!-- 请在此处完成你的实现 -->
+        <div>
+          <input type="number" placeholder="按给定的的数据顺序插入" />
+          <button>插入</button>
+          <div>给定数据：5000,6000,7000,8000,4000,3000,2000,1000</div>
+          <button onclick="onSort()">排序</button>
+          <div id="answer"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function onSort() {
+      const data = [5000, 6000, 7000, 8000, 4000, 3000, 2000, 1000];
+      const min = [];
+      data.forEach((num, index) => {
+        min.push(num);
+        let father = Math.floor((index - 1) / 2);
+        let weight = min.length - 1;
+        while (num < min[father]) {
+          [min[father], min[weight]] = [min[weight], min[father]];
+          weight = father;
+          father = Math.floor((father - 1) / 2);
+        }
+      });
+      const answer = document.getElementById("answer");
+      answer.innerText = min;
+    }
+  </script>
+</html>

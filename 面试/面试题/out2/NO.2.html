@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>题目序号：【2】</title>
+    <link href="../css/common.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="out-container">
+      <div class="title">
+        <h1>题目序号：【2】</h1>
+      </div>
+      <hr />
+      <div class="content">
+        <!-- 请在此处完成你的实现 -->
+        <input type="file" accept=".json" />
+        <div
+          style="
+            background-image: url('./Mark.jpg');
+            width: 2048px;
+            height: 1536px;
+          "
+        >
+          <canvas id="canvas" width="2048" height="1536" />
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    let mark = [];
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    document
+      .querySelector("input")
+      .addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.readAsText(file);
+          reader.onload = function (e) {
+            try {
+              mark = JSON.parse(e.target.result);
+              draw();
+            } catch (err) {
+              console.error("Error parsing JSON:", err);
+            }
+          };
+        }
+      });
+
+    function draw() {
+      mark.shapes.forEach((shape) => {
+        ctx.beginPath();
+        ctx.moveTo(shape.points[0][0], shape.points[0][1]);
+        shape.points.forEach((point) => {
+          ctx.lineTo(point[0], point[1]);
+        });
+        ctx.closePath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      });
+    }
+  </script>
+</html>
